@@ -35,7 +35,7 @@ class Scanner:
         if(c==40):
             self.add_token('(',None)
         elif(c==41):
-            self.add_token('(',None)
+            self.add_token(')',None)
         elif(c==123):
             self.add_token('{',None)
         elif(c==125):
