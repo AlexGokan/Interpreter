@@ -7,6 +7,10 @@
 #include <string.h>
 #include "defines.h"
 
+void print_seperator(){
+  printf("--------------------------------------------------------------------\n");
+}
+
 typedef struct Token{
   int type;
   char* lexeme;
@@ -32,7 +36,7 @@ typedef struct Scanner{
 }Scanner;
 
 void print_all_tokens(struct Scanner* S){
-  printf("--------------------------------------------------------------------\n");
+  print_seperator();
   struct Token* t = S->tokens;
   while(t != NULL){
     printf("Token of type: %d     ",t->type);
