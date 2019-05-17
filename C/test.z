@@ -1,7 +1,1 @@
-x = 1.500
-if(x<2.0){
-  return 3.0
-}
-else{
-  return 5.0
-}
+ifa = 3.15;

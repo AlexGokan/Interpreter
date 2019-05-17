@@ -39,6 +39,12 @@ void print_all_tokens(struct Scanner* S){
     if(t->type == NUMBER){
       printf("%f",t->num_literal);
     }
+    if(t->type == EOFTOKEN){
+      printf(" (EOF)");
+    }
+    if(t->type == EQUAL){
+      printf(" = ");
+    }
     if(t->type == STRING){
       for(int i=0; i<t->string_length; i++){
         printf("%c",(t->string_literal)[i]);
@@ -60,7 +66,7 @@ void print_all_tokens(struct Scanner* S){
 }
 
 bool is_alphabetic(char c){
-  if((c>=97 & c<=122) | (c >=65 & c<=90) | (c==95)){
+  if((c>='a' & c<='z') | (c >='A' & c<='Z') | (c=='_')){
     return true;
   }
   return false;
@@ -280,7 +286,7 @@ void scan_identifier(struct Scanner* S){
   }
   text[len] = '\0';//to make it a string!
 
-  printf("text 0:  %d\n",text[0]);
+  // printf("text 0:  %d\n",text[0]);
 
   int type;
   if((text != NULL) & (text[0] != '\0')){
@@ -345,68 +351,69 @@ void scan_identifier(struct Scanner* S){
 
 void scan_token(struct Scanner* S){
   char c = advance(S);
+  // printf("%d\n",c);
   switch(c){
-    case 40:
+    case '(':
       add_token(S,LPAREN,NULL,0,0);
       break;
-    case 41:
+    case ')':
       add_token(S,RPAREN,NULL,0,0);
       break;
-    case 125:
+    case '}':
       add_token(S,RCURLY,NULL,0,0);
       break;
-    case 123:
+    case '{':
       add_token(S,LCURLY,NULL,0,0);
       break;
-    case 91:
+    case '[':
       add_token(S,LBRACKET,NULL,0,0);
       break;
-    case 93:
+    case ']':
       add_token(S,RBRACKET,NULL,0,0);
-    case 44:
+    case ',':
       add_token(S,COMMA,NULL,0,0);
       break;
-    case 46:
+    case '.':
       add_token(S,DOT,NULL,0,0);
       break;
-    case 45:
+    case '-':
       add_token(S,MINUS,NULL,0,0);
       break;
-    case 43:
+    case '+':
       add_token(S,PLUS,NULL,0,0);
       break;
-    case 59:
+    case ';':
       add_token(S,SEMICOLON,NULL,0,0);
       break;
-    case 42:
+    case '*':
       add_token(S,STAR,NULL,0,0);
       break;
-    case 33:
-      if(match(S,61)){
+    case '!':
+      if(match(S,'=')){
           add_token(S,NOTEQUAL,NULL,0,0);
       }
       else{
         add_token(S,EXLAMATION,NULL,0,0);
       }
       break;
-    case 61:
-      if(match(S,61)){
+    case '=':
+      if(match(S,'=')){
         add_token(S,EQUALEQUAL,NULL,0,0);
       }
       else{
         add_token(S,EQUAL,NULL,0,0);
       }
       break;
-    case 60:
-      if(match(S,61)){
+    case '<':
+      if(match(S,'=')){
         add_token(S,LESSEQUAL,NULL,0,0);
       }
       else{
         add_token(S,LESSTHAN,NULL,0,0);
       }
       break;
-    case 62:
-      if(match(S,61)){
+    case '>':
+      if(match(S,'=')){
           add_token(S,GREATEREQUAL,NULL,0,0);
       }
       else{
@@ -419,11 +426,11 @@ void scan_token(struct Scanner* S){
       break;
     case 13:
       break;
-    case 10:
+    case '\n':
       (S->line)++;
       break;
     default:
-      if(c==34){
+      if(c=='\"'){
         scan_string(S);
       }
       else if(is_digit(c)){
